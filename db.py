@@ -21,8 +21,8 @@ class DB:
         mycursor.execute("select schema_name from information_schema.schemata where schema_name = '"+self.db_name+"';")
         myresult = mycursor.fetchone()
         if(myresult):
-            print("successfull");
             mycursor.execute("USE "+self.db_name);
+            mycursor.close();
         else:
             self.setupDB()
         
@@ -36,7 +36,6 @@ class DB:
         ) as file:
             script = file.read()
             mycursor.execute(script)
-            self.db_conn.commit()
         mycursor.close()
         self.db_conn.close()
 
@@ -46,11 +45,15 @@ class DB:
         cursor = self.db_conn.cursor()
         cursor.execute(query)
         data=cursor.fetchall()
+        cursor.close()
         return data
     
     def conn_close(self):
-        self.db_conn.commit()
         self.db_conn.close()
 
+    def commit_db(self):
+        self.db_conn.commit()
 
+    def  __del__(self):
+        self.conn_close()
     

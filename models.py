@@ -5,7 +5,6 @@ class Program(MyBaseModel):
     primary_key="id"
     fields=["id","name","description","start_date","end_date"]
 
-
 class Student(MyBaseModel):
     table="student"
     primary_key="id"
